@@ -22,8 +22,8 @@ private:
 	Context* nextGraph;
 	MARK mark;
 public:
-	int x;
-	int y;//This value can only be set if the current box's position, box movement, or rotation is successful
+	//int x;
+	//int y;//This value can only be set if the current box's position, box movement, or rotation is successful
 
 private:
 	Score s;

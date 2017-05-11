@@ -1,5 +1,6 @@
 #include "../include/game.h"
 #include "../include/rand.h"
+#include <csignal>
 #include <cstring>
 #include <cstdio>
 #include <pthread.h>
@@ -108,8 +109,6 @@ Game::~Game()
 Game::Game()
 {
 	m_graph = NULL;
-	x = 1;
-	y = 7;
 	CubePoint p;
 	int i;
 	s.printMessage();
@@ -140,14 +139,6 @@ Game::Game()
 		m_penal[23][i] = 1;
 		m_penal[0][i] = 1;
 	}
-	/*Test panel value is normal
-	for(i = 0; i < 24; i++)
-	{
-		for(int j = 0; j < 17; j++)
-			cout << m_penal[i][j] <<" ";
-		cout << endl;
-	}
-	*/
 	fflush(stdout);
 }
 
@@ -171,31 +162,24 @@ char Game::getShape()
 
 bool Game::erasePenal()
 {
-	int i,j;
-	int b[3][3] = {0};  //Get an array of squares
-
 	m_graph->printG(CLEAR);
-	memcpy(b,m_graph->getArray(),CUBE_SIZE);
-	for(i = 0; i < 3; i++)
-		for(j = 0; j < 3; j++)
-		{
-			m_penal[i + x][j + y] -= b[i][j];
-		m_color[i][j] = CLEAR;
-		}
 	return true;
 }
 
 bool Game::recoverPenal()
 {
+	int x,y;
 	int i,j;
 	int b[3][3] = {0};  //Get an array of squares
 
+	m_graph->getLocate(&x,&y);
 	memcpy(b,m_graph->getArray(),CUBE_SIZE);
 	for(i = x; i < x + 3; i++)
 		for(j = y; j < y + 3; j++)
 		{
 			m_penal[i][j] += b[i-x][j-y];
-		m_color[i][j] = m_graph->getColor();
+			if(b[i-x][j-y] == 1)
+				m_color[i][j] = m_graph->getColor();
 		}
 	return true;
 
@@ -203,25 +187,14 @@ bool Game::recoverPenal()
 
 bool Game::setPenal()
 {
+	int x,y;
 	int i,j;
-	int b[3][3] = {0};  //Get an array of squares
 
 	m_graph->getLocate(&x,&y);
-	memcpy(b,m_graph->getArray(),CUBE_SIZE);
-
-	/*Check if the array is normal
-	for(i = 0;i < 3; i++)
-	{
-		for(j = 0; j < 3; j++)
-			cout<<b[i][j]<< " ";
-		cout<<endl;
-	}
-	*/
 	for(i = x; i < x + 3; i++)
 		for(j = y; j < y + 3; j++)
 		{
-			m_penal[i][j] += b[i-x][j-y];
-			if(m_penal[i][j] > 1)
+			if(m_penal[i][j] > 0)
 			{
 				cout<<"game over"<<endl;
 				//Plus score statistics rankings
@@ -234,22 +207,14 @@ bool Game::setPenal()
 
 void Game::createCube()
 {
-		m_graph = nextGraph;
-	setPenal();
+	m_graph = nextGraph;
 	m_graph->printG(YELLOW);
+	setPenal();
 
 	nextGraph = new Context(getShape());
 	nextGraph->draw();
 	nextGraph->setLocate(1,7);
 	printNextCube(nextGraph);
-	/*
-	for(int i = 0; i < 24; i++)
-	{
-		for(int j = 0; j < 17; j++)
-			cout << m_penal[i][j] <<" ";
-		cout << endl;
-	}
-	*/
 }
 
 void Game::move(int dir)
@@ -257,15 +222,14 @@ void Game::move(int dir)
 
 	if(GAME_RUN != mark)
 		return;
-	erasePenal();
 	pthread_mutex_lock(&mutex_lock);
 	switch(dir)
 	{
 		case DOWN:
 			if(false == isAttachBottom())
 			{
+				erasePenal();
 				m_graph->move(DOWN);
-				setPenal();
 				m_graph->printG(YELLOW);
 			}
 			else
@@ -279,27 +243,16 @@ void Game::move(int dir)
 		case LEFT:
 			if(false == isAttachLeft())
 			{
+				erasePenal();
 				m_graph->move(LEFT);
-				setPenal();
 				m_graph->printG(YELLOW);
 			}
-			else
-			{
-				recoverPenal();
-				m_graph->printG(YELLOW);
-			}
-
 			break;
 		case RIGHT:
 			if(false == isAttachRight())
 			{
+				erasePenal();
 				m_graph->move(RIGHT);
-				setPenal();
-				m_graph->printG(YELLOW);
-			}
-			else
-			{
-				recoverPenal();
 				m_graph->printG(YELLOW);
 			}
 			break;
@@ -312,6 +265,7 @@ void Game::move(int dir)
 void Game::roll()
 {
 	//Remove the value of the box, first put into an array
+	int x,y;
 	int i,j;
 	int flag = 0;
 	int b[3][3] = {0};  //Get an array of squares
@@ -345,7 +299,7 @@ void Game::roll()
 	{
 		m_graph->roll();
 	}
-	setPenal();
+	//setPenal();
 	m_graph->printG(YELLOW);
 }
 
@@ -474,6 +428,7 @@ void Game::down(int level)
 		for(j = 1; j < 16; j++)
 		{
 			m_penal[i][j] = m_penal[i - 1][j];
+			m_color[i][j] = m_color[i - 1][j];
 		}
 	//Refresh the panel
 	CubePoint p;
@@ -502,9 +457,7 @@ void* listenKey(void *ptr)
 	char key;
 	while(1)
 	{
-		system("stty -icanon -echo");
 		key = getchar();
-		system("stty icanon echo");
 		switch(key)
 		{
 			case 'a':
@@ -539,11 +492,20 @@ void* listenKey(void *ptr)
 	}
 }
 
+//Manipulate the "Ctrl+C" on terminal
+void SignalHandlerFunction (int sig)
+{
+	system("stty icanon echo");
+	kill(getpid(), SIGKILL);
+}
+
 int main()
 {
+	signal(SIGINT, SignalHandlerFunction);
 	pthread_t t1;
 	pthread_mutex_init(&mutex_lock, NULL);
 	system("clear");
+	system("stty -icanon -echo");
 	Game g;
 	//g.createCube();
 	g.gameInit();
