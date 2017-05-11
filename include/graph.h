@@ -1,17 +1,20 @@
+#ifndef GRAPH_H_
+#define GRAPH_H_
+
 #include <iostream>
-using namespace std;
 #include <stdio.h>
-#include "cubePoint.h"
 #include <stdlib.h>
+#include "cubePoint.h"
 #define DOWN 0
 #define LEFT 1
 #define RIGHT 2
 
+using namespace std;
 
 class Gbase{
 protected:
 	int x;
-	int y;	//a[0][0]的位置
+	int y;	//a[0][0] position
 	int a[3][3];
 public:
 	Gbase(){
@@ -26,10 +29,11 @@ public:
 	virtual int roll();
 	virtual void draw(){}
 	void setLocate(int a,int b){x = a;y = b;}
-    void getLocate(int* a,int* b){*a = x;*b = y;}
-    void printG(int color);
-    //获取数组首地址
-    void* getArray(){return (void*)a;}
+	void getLocate(int* a,int* b){*a = x;*b = y;}
+	void printG(int color);
+	
+	//Get the first address of the array
+	void* getArray(){return (void*)a;}
 };
 
 class Zgraph : public Gbase{
@@ -46,6 +50,7 @@ public:
 		a[2][2] = 0;
 	}
 };
+
 class Tgraph : public Gbase{
 public:
 	void draw(){
@@ -60,6 +65,7 @@ public:
 		a[2][2] = 0;
 	}
 };
+
 class Ograph : public Gbase{
 public:
 	void draw(){
@@ -75,6 +81,7 @@ public:
 	}
 	virtual int roll(){}
 };
+
 class Igraph : public Gbase{
 public:
 	void draw(){
@@ -89,6 +96,7 @@ public:
 		a[2][2] = 0;
 	}
 };
+
 class Lgraph : public Gbase{
 public:
 	void draw(){
@@ -111,10 +119,10 @@ private:
 	color clr;
 
 public:
-    ~Context()
-    {
-        delete gbase;
-    }
+	~Context()
+	{
+		delete gbase;
+	}
 	Context(char cType)
 	{
 		switch(cType)
@@ -144,24 +152,23 @@ public:
 	void draw(){gbase->draw();}
 
 	void setLocate(int a,int b){gbase->setLocate(a,b);}
-    void getLocate(int *a,int* b){gbase->getLocate(a,b);}
-    void* getArray(){gbase->getArray();}
+	void getLocate(int *a,int* b){gbase->getLocate(a,b);}
+	void* getArray(){gbase->getArray();}
 
-//    void printG(int color){gbase->printG(color);}
-    void printG(int color){
-	if(color == CLEAR)
-		gbase->printG(CLEAR);
-	else gbase->printG(clr);
+	void printG(int color){
+		if(color == CLEAR)
+			gbase->printG(CLEAR);
+		else gbase->printG(clr);
 	}
 
-void setColor(color clr)
-{
-	this->clr = clr;
-}
-color getColor()
-{
-	return clr;
-}
+	void setColor(color clr){
+		this->clr = clr;
+	}
+
+	color getColor(){
+		return clr;
+	}
 
 };
 
+#endif

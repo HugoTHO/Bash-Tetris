@@ -1,6 +1,6 @@
-#include"../include/cur.h"
-#include<cstdio>
-#include<cstdlib>
+#include "../include/cur.h"
+#include <cstdio>
+#include <cstdlib>
 
 void Cur::moveCur(const int x,const int y)
 {
@@ -19,24 +19,3 @@ void Cur::resumeCur()
 {
 	printf("\33[u");
 }
-
-/*
-int main(int argc,char *argv[])
-{
-	Cur cur;
-	system("clear");
-	cur.saveCur();
-	cur.moveCur(10,9);
-	printf("a");
-	cur.resumeCur();
-	return 0;
-}
-
-*/
-
-
-
-
-
-
-

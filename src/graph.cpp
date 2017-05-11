@@ -1,5 +1,6 @@
 #include "../include/graph.h"
 #include <unistd.h>
+
 void Gbase::printG(int color)
 {
     int i,j;
@@ -15,6 +16,7 @@ void Gbase::printG(int color)
             }
         }
 }
+
 int Gbase::move(int dir)
 {
 	switch(dir)
@@ -43,5 +45,3 @@ int Gbase::roll()
             a[i][j] = b[i][j];
         }
 }
-
-

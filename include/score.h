@@ -5,9 +5,9 @@
 using namespace std;
 
 class Score{
+private:
     string player;
-    int score;
-	
+    int score;	
 
 public:
     Score(){player = "viMer";score = 0;};

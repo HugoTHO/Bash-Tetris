@@ -2,7 +2,7 @@
 ![](https://github.com/fanux/tetris/blob/master/img/tetris.png?raw=true)
 ## Build
 ```
-$ cd src && make
+$ make
 $ ./game
 $ g++ --version
 g++ (GCC) 4.8.5 20150623 (Red Hat 4.8.5-4)

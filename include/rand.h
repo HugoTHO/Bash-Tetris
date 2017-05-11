@@ -1,9 +1,10 @@
 #ifndef RAND_H
 #define RAND_H
+
 class Rand
 {
 public:
-    //返回一个x到y之间的随机数
+    //Returns a random number between x and y
     int randNum(int x,int y);
     Rand();
 };
