@@ -5,8 +5,8 @@ void Gbase::printG(int color)
 {
     int i,j;
     CubePoint p;
-    for(i = x; i < x+3; i++)
-        for(j = y; j < y+3; j++)
+    for(i = x; i < x+4; i++)
+        for(j = y; j < y+4; j++)
         {
             if(a[i - x][j - y] == 1)
             {
@@ -44,4 +44,27 @@ int Gbase::roll()
         {
             a[i][j] = b[i][j];
         }
+}
+
+int Igraph::roll()
+{
+    if (a[0][1] == 0)
+    {
+        a[0][1] = 1;
+        a[1][0] = 0;
+        a[1][2] = 0;
+        a[1][3] = 0;
+        a[2][1] = 1;
+        a[3][1] = 1;
+    }
+    else
+    {
+        a[0][1] = 0;
+        a[1][0] = 1;
+        a[1][1] = 1;
+        a[1][2] = 1;
+        a[1][3] = 1;
+        a[2][1] = 0;
+        a[3][1] = 0;
+    }
 }

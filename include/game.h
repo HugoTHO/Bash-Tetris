@@ -21,15 +21,11 @@ private:
 
 	Context* nextGraph;
 	MARK mark;
-public:
-	//int x;
-	//int y;//This value can only be set if the current box's position, box movement, or rotation is successful
+
+	Score s;
 
 private:
-	Score s;
-private:
-	//Restore settings (the box will explore the next location is legitimate, illegal to restore the panel)
-	bool recoverPenal();
+	
 	//Whether landing (whether to encounter the bottom)
 	bool isAttachBottom();
 	//Whether meet the left
@@ -38,10 +34,10 @@ private:
 	bool isAttachRight();
 	//Randomly get the tetromino's shape
 	char getShape();
-	//Use a square array to assign an array of panels
-	bool setPenal();
-	//After the block moves, the left panel information should be erased
-	bool erasePenal();
+	//check the panel to identify illegal block creation
+	bool checkPanel();
+	//Incorporate the block shape on panel when touch
+	void increasePanel();
 public:
 	Game();
 
@@ -53,12 +49,12 @@ public:
 	void move(int dir);
 	//Rotation method
 	void roll();
-	//Stop the tetromino
-	void stop();
+	//Down the tetromino to the panel;
+	void fall();
 	//Detect and erase full lines
-	void erase();
+	void checkLines();
 	//Down upper graphics over the erased line
-	void down(int level);
+	void downPanel(int level);
 
 	void printNextCube(Context* m_graph);
 	void gameInit();

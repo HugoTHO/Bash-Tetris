@@ -15,20 +15,20 @@ class Gbase{
 protected:
 	int x;
 	int y;	//a[0][0] position
-	int a[3][3];
+	int a[4][4];
 public:
 	Gbase(){
 		int i,j;
 		x = 0;
 		y = 0;
-		for(j = 0; j < 3; j++)
-		for(i = 0; i < 3; i++)
+		for(j = 0; j < 4; j++)
+		for(i = 0; i < 4; i++)
 		a[i][j] = 0;
 	}
 	int move(int dir);
 	virtual int roll();
 	virtual void draw(){}
-	void setLocate(int a,int b){x = a;y = b;}
+	virtual void setLocate(int a,int b){x = a;y = b;}
 	void getLocate(int* a,int* b){*a = x;*b = y;}
 	void printG(int color);
 	
@@ -42,27 +42,64 @@ public:
 		a[0][0] = 1;
 		a[0][1] = 1;
 		a[0][2] = 0;
+		a[0][3] = 0;
 		a[1][0] = 0;
 		a[1][1] = 1;
 		a[1][2] = 1;
+		a[1][3] = 0;
 		a[2][0] = 0;
 		a[2][1] = 0;
 		a[2][2] = 0;
+		a[2][3] = 0;
+		a[3][0] = 0;
+		a[3][1] = 0;
+		a[3][2] = 0;
+		a[3][3] = 0;
+	}
+};
+
+class Sgraph : public Gbase{
+public:
+	void draw(){
+		a[0][0] = 0;
+		a[0][1] = 1;
+		a[0][2] = 1;
+		a[0][3] = 0;
+		a[1][0] = 1;
+		a[1][1] = 1;
+		a[1][2] = 0;
+		a[1][3] = 0;
+		a[2][0] = 0;
+		a[2][1] = 0;
+		a[2][2] = 0;
+		a[2][3] = 0;
+		a[3][0] = 0;
+		a[3][1] = 0;
+		a[3][2] = 0;
+		a[3][3] = 0;
 	}
 };
 
 class Tgraph : public Gbase{
 public:
+	void setLocate(int a,int b){x = --a;y = b;}
 	void draw(){
-		a[0][0] = 1;
-		a[0][1] = 1;
-		a[0][2] = 1;
-		a[1][0] = 0;
+		a[0][0] = 0;
+		a[0][1] = 0;
+		a[0][2] = 0;
+		a[0][3] = 0;
+		a[1][0] = 1;
 		a[1][1] = 1;
-		a[1][2] = 0;
+		a[1][2] = 1;
+		a[1][3] = 0;
 		a[2][0] = 0;
-		a[2][1] = 0;
+		a[2][1] = 1;
 		a[2][2] = 0;
+		a[2][3] = 0;
+		a[3][0] = 0;
+		a[3][1] = 0;
+		a[3][2] = 0;
+		a[3][3] = 0;
 	}
 };
 
@@ -72,12 +109,19 @@ public:
 		a[0][0] = 1;
 		a[0][1] = 1;
 		a[0][2] = 0;
+		a[0][3] = 0;
 		a[1][0] = 1;
 		a[1][1] = 1;
 		a[1][2] = 0;
+		a[1][3] = 0;
 		a[2][0] = 0;
 		a[2][1] = 0;
 		a[2][2] = 0;
+		a[2][3] = 0;
+		a[3][0] = 0;
+		a[3][1] = 0;
+		a[3][2] = 0;
+		a[3][3] = 0;
 	}
 	virtual int roll(){}
 };
@@ -88,13 +132,21 @@ public:
 		a[0][0] = 0;
 		a[0][1] = 1;
 		a[0][2] = 0;
+		a[0][3] = 0;
 		a[1][0] = 0;
 		a[1][1] = 1;
 		a[1][2] = 0;
+		a[1][3] = 0;
 		a[2][0] = 0;
 		a[2][1] = 1;
 		a[2][2] = 0;
+		a[2][3] = 0;
+		a[3][0] = 0;
+		a[3][1] = 1;
+		a[3][2] = 0;
+		a[3][3] = 0;
 	}
+	virtual int roll();
 };
 
 class Lgraph : public Gbase{
@@ -103,12 +155,41 @@ public:
 		a[0][0] = 0;
 		a[0][1] = 1;
 		a[0][2] = 0;
+		a[0][3] = 0;
 		a[1][0] = 0;
 		a[1][1] = 1;
 		a[1][2] = 0;
+		a[1][3] = 0;
 		a[2][0] = 0;
 		a[2][1] = 1;
 		a[2][2] = 1;
+		a[2][3] = 0;
+		a[3][0] = 0;
+		a[3][1] = 0;
+		a[3][2] = 0;
+		a[3][3] = 0;
+	}
+};
+
+class Jgraph : public Gbase{
+public:
+	void draw(){
+		a[0][0] = 0;
+		a[0][1] = 1;
+		a[0][2] = 0;
+		a[0][3] = 0;
+		a[1][0] = 0;
+		a[1][1] = 1;
+		a[1][2] = 0;
+		a[1][3] = 0;
+		a[2][0] = 1;
+		a[2][1] = 1;
+		a[2][2] = 0;
+		a[2][3] = 0;
+		a[3][0] = 0;
+		a[3][1] = 0;
+		a[3][2] = 0;
+		a[3][3] = 0;
 	}
 };
 
@@ -130,6 +211,9 @@ public:
 			case 'Z':
 				gbase = new Zgraph();clr = YELLOW;///
 				break;
+			case 'S':
+				gbase = new Sgraph();clr = PURPLE;///
+				break;
 			case 'T':
 				gbase = new Tgraph();clr = GREEN;///
 				break;
@@ -141,6 +225,9 @@ public:
 				break;
 			case 'L':
 				gbase = new Lgraph();clr = WHITE;///
+				break;
+			case 'J':
+				gbase = new Jgraph();clr = DEEP_GREEN;///
 				break;
 			default:
 				printf("no %c type\n",cType);
