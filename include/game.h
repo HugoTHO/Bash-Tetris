@@ -15,8 +15,8 @@ enum MARK{
 class Game
 {
 private:
-	int m_penal[24][17];
-	color m_color[24][17];
+	int m_penal[24][12];
+	color m_color[24][12];
 	Context* m_graph;
 
 	Context* nextGraph;

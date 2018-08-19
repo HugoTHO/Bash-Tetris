@@ -10,7 +10,7 @@ void Gbase::printG(int color)
         {
             if(a[i - x][j - y] == 1)
             {
-                p.setLocate(i,j);
+                p.setLocate(i,5+j);
                 p.setColor(color);
                 p.printPoint();
             }

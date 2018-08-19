@@ -6,7 +6,7 @@
 #include <pthread.h>
 #include <unistd.h>
 #define SPEED 500000
-#define PENAL_SIZE (17*24*sizeof(int))
+#define PENAL_SIZE (12*24*sizeof(int))
 #define CUBE_SIZE (4*4*sizeof(int))
 
 pthread_mutex_t	mutex_lock;
@@ -119,21 +119,21 @@ Game::Game()
 	memset((void*)m_color,0,PENAL_SIZE);
 	for(i = 0; i < 24; i++)
 	{
-		p.setLocate(i,0);
+		p.setLocate(i,5);
 		p.setColor(BLUE);
 		p.printPoint();
 		p.setLocate(i,16);
 		p.setColor(BLUE);
 		p.printPoint();
 		m_penal[i][0] = 1;
-		m_penal[i][16] = 1;
+		m_penal[i][11] = 1;
 	}
-	for(i = 0; i < 17; i++)
+	for(i = 0; i < 12; i++)
 	{
-		p.setLocate(23,i);
+		p.setLocate(23,5+i);
 		p.setColor(BLUE);
 		p.printPoint();
-		p.setLocate(0,i);
+		p.setLocate(0,5+i);
 		p.setColor(RED);
 		p.printPoint();
 		m_penal[23][i] = 1;
@@ -414,7 +414,7 @@ void Game::checkLines()
    static int count = 0;
    for(i = 22; i > 0; i--)
    {
-		for(j = 1; j < 16; j++)
+		for(j = 1; j < 11; j++)
 		{
 			if(m_penal[i][j] == 0)
 			{
@@ -442,7 +442,7 @@ void Game::downPanel(int level)
 	int flag = 1;
 
 	for(i = level; i > 1; i--)
-		for(j = 1; j < 16; j++)
+		for(j = 1; j < 11; j++)
 		{
 			m_penal[i][j] = m_penal[i - 1][j];
 			m_color[i][j] = m_color[i - 1][j];
@@ -450,17 +450,17 @@ void Game::downPanel(int level)
 	//Refresh the panel
 	CubePoint p;
 	for(i = 1; i < 23; i++)
-		for(j = 1; j < 16; j++)
+		for(j = 1; j < 11; j++)
 		{
 			if(m_penal[i][j] == 1)
 			{
-				p.setLocate(i,j);
+				p.setLocate(i,5+j);
 				p.setColor(m_color[i][j]);
 				p.printPoint();
 			}
 			if(m_penal[i][j] == 0)
 			{
-				p.setLocate(i,j);
+				p.setLocate(i,5+j);
 				p.setColor(CLEAR);
 				p.printPoint();
 			}
